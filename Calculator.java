@@ -9,15 +9,16 @@ public class Calculator extends JFrame {
     public Calculator() {
 
         setTitle("계산기");
-        setSize(335, 508);
-//        setLayout(new FlowLayout());
-        setLayout(new BorderLayout(0, -3));
+        setSize(335, 509);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+//        setLayout(new BorderLayout(0, -3));
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.getImage("D:/NewGit/workplace/img/cal.png");
         setIconImage(img);
 
-        showMenu(); showResult(); showNumBtn();
+        showMenu();
+        showNumBtn();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -25,33 +26,45 @@ public class Calculator extends JFrame {
 
     /**
      *  계산기 설정, 기록 확인 버튼
+     *  showResult()를 여기에 넣어서 같은 panel에 두고 layout 설정해보자.
      */
     private void showMenu() {
         JMenuBar mainPanel = new JMenuBar();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
         JPanel resultPanel = showResult();
 
+        JPanel toolBarPanel = new JPanel();
+        JButton settingBtn = new JButton("Setting");
+        toolBarPanel.add(settingBtn);
+
+        mainPanel.add(toolBarPanel);
+        mainPanel.add(Box.createVerticalStrut(-24));
         mainPanel.add(resultPanel);
 
-        add(mainPanel, BorderLayout.NORTH);
+        add(mainPanel);
     }
 
     /**
      * 숫자 연산, 결과, 미리보기 출력
+     *
      */
     private JPanel showResult() {
         
         JPanel resultMain = new JPanel();
+        resultMain.setLayout(new FlowLayout());
+
         
         JPanel previewPanel = new JPanel();
-        JTextField preview = new JTextField(23);
+        JTextField preview = new JTextField(26);
         preview.setText("0001");
         preview.setEditable(false);
         preview.setHorizontalAlignment(JTextField.RIGHT);
         previewPanel.add(preview);
 
         JPanel resultViewPanel = new JPanel();
-        Font resultFont = new Font("Dialog", Font.PLAIN, 36);
-        JTextField result = new JTextField(10);
+        Font resultFont = new Font("Dialog", Font.PLAIN, 33);
+        JTextField result = new JTextField(11);
         result.setText("0001");
         result.setHorizontalAlignment(SwingConstants.RIGHT);
         result.setFont(resultFont);
@@ -151,7 +164,7 @@ public class Calculator extends JFrame {
         mainPanel.add(memoryP);
         mainPanel.add(numBtnPanel);
 
-        add(mainPanel, BorderLayout.CENTER);
+        add(mainPanel);
     }
 
     public static void main(String[] args) {
