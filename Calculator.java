@@ -9,15 +9,17 @@ public class Calculator extends JFrame {
     public Calculator() {
 
         setTitle("계산기");
-        setSize(335, 509);
+        setSize(335, 514);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+//        setLayout(new FlowLayout(FlowLayout.CENTER));
 //        setLayout(new BorderLayout(0, -3));
 
         Toolkit kit = Toolkit.getDefaultToolkit();
-        Image img = kit.getImage("D:/NewGit/workplace/img/cal.png");
+        Image img = kit.getImage("img/cal.png");
         setIconImage(img);
 
         showMenu();
+        showResult();
         showNumBtn();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,17 +32,20 @@ public class Calculator extends JFrame {
      */
     private void showMenu() {
         JMenuBar mainPanel = new JMenuBar();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        JPanel resultPanel = showResult();
+//        JPanel resultPanel = showResult();
 
         JPanel toolBarPanel = new JPanel();
-        JButton settingBtn = new JButton("Setting");
+
+//        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18);
+        JButton settingBtn = new JButton("≡");
+//        settingBtn.setFont(settingBtnFont);
+//        settingBtn.setPreferredSize(new Dimension(40, 35));
         toolBarPanel.add(settingBtn);
 
         mainPanel.add(toolBarPanel);
-        mainPanel.add(Box.createVerticalStrut(-24));
-        mainPanel.add(resultPanel);
+//        mainPanel.add(resultPanel);
 
         add(mainPanel);
     }
@@ -52,10 +57,13 @@ public class Calculator extends JFrame {
     private JPanel showResult() {
         
         JPanel resultMain = new JPanel();
-        resultMain.setLayout(new FlowLayout());
+//        resultMain.setLayout(new BorderLayout(0, 0));
+        resultMain.setLayout(new BoxLayout(resultMain, BoxLayout.Y_AXIS));
 
         
         JPanel previewPanel = new JPanel();
+        previewPanel.setPreferredSize(new Dimension(290, 1));
+//        System.out.println(previewPanel.getPreferredSize());
         JTextField preview = new JTextField(26);
         preview.setText("0001");
         preview.setEditable(false);
@@ -63,6 +71,8 @@ public class Calculator extends JFrame {
         previewPanel.add(preview);
 
         JPanel resultViewPanel = new JPanel();
+        resultViewPanel.setPreferredSize(new Dimension(10, 28));
+//        System.out.println(resultViewPanel.getPreferredSize());
         Font resultFont = new Font("Dialog", Font.PLAIN, 33);
         JTextField result = new JTextField(11);
         result.setText("0001");
@@ -75,7 +85,7 @@ public class Calculator extends JFrame {
         resultMain.add(previewPanel);
         resultMain.add(resultViewPanel);
 
-//        add(resultViewPanel, BorderLayout.NORTH);
+        add(resultMain);
 
         return resultMain;
     }
@@ -86,6 +96,9 @@ public class Calculator extends JFrame {
     private void showNumBtn() {
         JPanel mainPanel = new JPanel();
 
+//        mainPanel.setPreferredSize(new Dimension(10, -100));
+//        System.out.println(mainPanel.getPreferredSize());
+
         JPanel memoryP = new JPanel();
         memoryP.setLayout(new GridLayout(1, 6, 2, 0));
         JButton memoryClear = new JButton("MC");
@@ -95,7 +108,9 @@ public class Calculator extends JFrame {
         JButton memorySave = new JButton("MS");
         JButton memoryView= new JButton("M∨");
 
-//        memoryClear.setPreferredSize(new Dimension(52, 28));
+//        System.out.println(memoryClear.getPreferredSize());
+//        memoryClear.setPreferredSize(new Dimension(memoryClear.getPreferredSize().width-29, 26));
+//        System.out.println(memoryClear.getPreferredSize());
 
         memoryP.add(memoryClear);
         memoryP.add(memoryReset);
@@ -105,7 +120,7 @@ public class Calculator extends JFrame {
         memoryP.add(memoryView);
 
         JPanel numBtnPanel = new JPanel();
-        numBtnPanel.setLayout(new GridLayout(6, 4, 2, 2));
+        numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
         JButton num1 = new JButton("1");
         JButton num2 = new JButton("2");
         JButton num3 = new JButton("3");
@@ -158,8 +173,8 @@ public class Calculator extends JFrame {
         numBtnPanel.add(comma);
         numBtnPanel.add(equal);
 
-        System.out.println(num1.getPreferredSize());
-        System.out.println(memoryClear.getPreferredSize());
+//        System.out.println(num1.getPreferredSize());
+//        System.out.println(memoryClear.getPreferredSize());
 
         mainPanel.add(memoryP);
         mainPanel.add(numBtnPanel);
