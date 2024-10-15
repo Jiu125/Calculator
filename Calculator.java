@@ -54,7 +54,7 @@ public class Calculator extends JFrame {
      * 숫자 연산, 결과, 미리보기 출력
      *
      */
-    private JPanel showResult() {
+    private void showResult() {
         
         JPanel resultMain = new JPanel();
 //        resultMain.setLayout(new BorderLayout(0, 0));
@@ -87,7 +87,7 @@ public class Calculator extends JFrame {
 
         add(resultMain);
 
-        return resultMain;
+//        return resultMain;
     }
 
     /**
