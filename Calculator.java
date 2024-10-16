@@ -12,7 +12,7 @@ public class Calculator extends JFrame {
         setSize(335, 514);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 //        setLayout(new FlowLayout(FlowLayout.CENTER));
-//        setLayout(new BorderLayout(0, -3));
+//        setLayout(new BorderLayout(0, -10));
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.getImage("img/cal.png");
@@ -32,20 +32,22 @@ public class Calculator extends JFrame {
      */
     private void showMenu() {
         JMenuBar mainPanel = new JMenuBar();
-//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-//        JPanel resultPanel = showResult();
+        JPanel resultPanel = showResult();
 
         JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BoxLayout(toolBarPanel, BoxLayout.X_AXIS));
 
 //        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18);
         JButton settingBtn = new JButton("≡");
+        settingBtn.setHorizontalAlignment(JButton.LEFT);
 //        settingBtn.setFont(settingBtnFont);
 //        settingBtn.setPreferredSize(new Dimension(40, 35));
         toolBarPanel.add(settingBtn);
 
         mainPanel.add(toolBarPanel);
-//        mainPanel.add(resultPanel);
+        mainPanel.add(resultPanel);
 
         add(mainPanel);
     }
@@ -54,7 +56,7 @@ public class Calculator extends JFrame {
      * 숫자 연산, 결과, 미리보기 출력
      *
      */
-    private void showResult() {
+    private JPanel showResult() {
         
         JPanel resultMain = new JPanel();
 //        resultMain.setLayout(new BorderLayout(0, 0));
@@ -64,7 +66,7 @@ public class Calculator extends JFrame {
         JPanel previewPanel = new JPanel();
         previewPanel.setPreferredSize(new Dimension(290, 1));
 //        System.out.println(previewPanel.getPreferredSize());
-        JTextField preview = new JTextField(26);
+        JTextField preview = new JTextField(27);
         preview.setText("0001");
         preview.setEditable(false);
         preview.setHorizontalAlignment(JTextField.RIGHT);
@@ -75,7 +77,7 @@ public class Calculator extends JFrame {
 //        System.out.println(resultViewPanel.getPreferredSize());
         Font resultFont = new Font("Dialog", Font.PLAIN, 33);
         JTextField result = new JTextField(11);
-        result.setText("0001");
+        result.setText("0002");
         result.setHorizontalAlignment(SwingConstants.RIGHT);
         result.setFont(resultFont);
         result.setEditable(false);
@@ -85,9 +87,9 @@ public class Calculator extends JFrame {
         resultMain.add(previewPanel);
         resultMain.add(resultViewPanel);
 
-        add(resultMain);
+//        add(resultMain);
 
-//        return resultMain;
+        return resultMain;
     }
 
     /**
@@ -176,8 +178,8 @@ public class Calculator extends JFrame {
 //        System.out.println(num1.getPreferredSize());
 //        System.out.println(memoryClear.getPreferredSize());
 
-        mainPanel.add(memoryP);
-        mainPanel.add(numBtnPanel);
+        mainPanel.add(memoryP, BorderLayout.NORTH);
+        mainPanel.add(numBtnPanel, BorderLayout.CENTER);
 
         add(mainPanel);
     }
