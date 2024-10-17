@@ -1,9 +1,11 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 
 /**
  *  계산기 디자인 파일
+ *  기본 배경 RGB : r=238,g=238,b=238
  */
 public class Calculator extends JFrame {
     public Calculator() {
@@ -11,6 +13,7 @@ public class Calculator extends JFrame {
         setTitle("계산기");
         setSize(335, 514);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
 //        setLayout(new FlowLayout(FlowLayout.CENTER));
 //        setLayout(new BorderLayout(0, -10));
 
@@ -31,52 +34,71 @@ public class Calculator extends JFrame {
      *  showResult()를 여기에 넣어서 같은 panel에 두고 layout 설정해보자.
      */
     private void showMenu() {
-        JMenuBar mainPanel = new JMenuBar();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        JPanel resultPanel = showResult();
-
         JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BoxLayout(toolBarPanel, BoxLayout.X_AXIS));
+        toolBarPanel.setLayout(new GridLayout());
+        JPanel subToolBtnPanel = new JPanel(new BorderLayout());
+        subToolBtnPanel.setPreferredSize(new Dimension(40, 0));
 
-//        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18);
+
+        JPanel subToolPanel1 = new JPanel();
+        //        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18)
         JButton settingBtn = new JButton("≡");
-        settingBtn.setHorizontalAlignment(JButton.LEFT);
+        settingBtn.setBorderPainted(false);
+        settingBtn.setFocusPainted(false);
+
+
+        JLabel calculatorName = new JLabel("표준");
 //        settingBtn.setFont(settingBtnFont);
-//        settingBtn.setPreferredSize(new Dimension(40, 35));
-        toolBarPanel.add(settingBtn);
 
-        mainPanel.add(toolBarPanel);
-        mainPanel.add(resultPanel);
+        subToolPanel1.add(settingBtn);
+        subToolPanel1.add(calculatorName);
 
-        add(mainPanel);
+        JPanel subToolPanel2 = new JPanel();
+        JButton recordBtn = new JButton("기록");
+        recordBtn.setBorderPainted(false);
+        recordBtn.setFocusPainted(false);
+
+        subToolPanel2.add(recordBtn);
+
+        subToolBtnPanel.add(subToolPanel1, BorderLayout.WEST);
+        subToolBtnPanel.add(subToolPanel2, BorderLayout.EAST);
+        toolBarPanel.add(subToolBtnPanel);
+
+
+        add(toolBarPanel);
     }
 
     /**
      * 숫자 연산, 결과, 미리보기 출력
      *
      */
-    private JPanel showResult() {
+    private void showResult() {
         
         JPanel resultMain = new JPanel();
 //        resultMain.setLayout(new BorderLayout(0, 0));
         resultMain.setLayout(new BoxLayout(resultMain, BoxLayout.Y_AXIS));
 
         
-        JPanel previewPanel = new JPanel();
-        previewPanel.setPreferredSize(new Dimension(290, 1));
+        JPanel previewPanel = new JPanel(new GridLayout());
+        previewPanel.setPreferredSize(new Dimension(10, 0));
+
 //        System.out.println(previewPanel.getPreferredSize());
-        JTextField preview = new JTextField(27);
+        JTextField preview = new JTextField(27) {
+            public void setBorder(Border border) {}
+        };
         preview.setText("0001");
         preview.setEditable(false);
         preview.setHorizontalAlignment(JTextField.RIGHT);
+
         previewPanel.add(preview);
 
-        JPanel resultViewPanel = new JPanel();
-        resultViewPanel.setPreferredSize(new Dimension(10, 28));
+        JPanel resultViewPanel = new JPanel(new GridLayout());
+        resultViewPanel.setPreferredSize(new Dimension(10, 40));
 //        System.out.println(resultViewPanel.getPreferredSize());
-        Font resultFont = new Font("Dialog", Font.PLAIN, 33);
-        JTextField result = new JTextField(11);
+        Font resultFont = new Font("Dialog", Font.BOLD, 48);
+        JTextField result = new JTextField(11) {
+            public void setBorder(Border border) {}
+        };
         result.setText("0002");
         result.setHorizontalAlignment(SwingConstants.RIGHT);
         result.setFont(resultFont);
@@ -87,9 +109,9 @@ public class Calculator extends JFrame {
         resultMain.add(previewPanel);
         resultMain.add(resultViewPanel);
 
-//        add(resultMain);
+        add(resultMain);
 
-        return resultMain;
+//        return resultMain;
     }
 
     /**
