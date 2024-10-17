@@ -3,15 +3,68 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 
+class JButtonMemory extends JButton {
+    Color c = new Color(0xeeeeee);
+
+    public JButtonMemory() {
+    }
+
+    public JButtonMemory(String text) {
+        super.setBackground(c);
+        setBorderPainted(false);
+        setFocusPainted(false);
+        this.setText(text);
+    }
+}
+
+/**
+ * 연산 버튼
+ */
+class JButtonS extends JButton {
+    Color c = new Color(0xfbfbfb);
+
+    public JButtonS() {
+    }
+
+    public JButtonS(String text) {
+        super.setBackground(c);
+        setBorderPainted(false);
+        setFocusPainted(false);
+        this.setText(text);
+    }
+}
+
+/**
+ * 숫자 버튼
+ */
+class JButtonWhite extends JButton {
+    Color c = new Color(0xeeeeee);
+
+    public JButtonWhite() {
+    }
+
+    public JButtonWhite(String text) {
+        super.setBackground(Color.WHITE);
+        setBorderPainted(false);
+        setFocusPainted(false);
+        this.setText(text);
+    }
+}
+
 /**
  *  계산기 디자인 파일
  *  기본 배경 RGB : r=238,g=238,b=238
+ *  코드 구조 참고
+ * @link : https://github.com/tejasmanohar/jframe-calculator/blob/master/src/calculator/Calculator.java
+ *
  */
 public class Calculator extends JFrame {
+    Color c = new Color(0xeeeeee);
     public Calculator() {
 
+
         setTitle("계산기");
-        setSize(335, 514);
+        setSize(335, 509);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 //        setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -24,6 +77,8 @@ public class Calculator extends JFrame {
         showMenu();
         showResult();
         showNumBtn();
+
+        System.out.println(c.getRed() + " " + c.getGreen() + " " + c.getBlue());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -42,21 +97,15 @@ public class Calculator extends JFrame {
 
         JPanel subToolPanel1 = new JPanel();
         //        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18)
-        JButton settingBtn = new JButton("≡");
-        settingBtn.setBorderPainted(false);
-        settingBtn.setFocusPainted(false);
-
+        JButtonMemory settingBtn = new JButtonMemory("≡");
 
         JLabel calculatorName = new JLabel("표준");
-//        settingBtn.setFont(settingBtnFont);
 
         subToolPanel1.add(settingBtn);
         subToolPanel1.add(calculatorName);
 
         JPanel subToolPanel2 = new JPanel();
-        JButton recordBtn = new JButton("기록");
-        recordBtn.setBorderPainted(false);
-        recordBtn.setFocusPainted(false);
+        JButtonMemory recordBtn = new JButtonMemory("기록");
 
         subToolPanel2.add(recordBtn);
 
@@ -125,12 +174,12 @@ public class Calculator extends JFrame {
 
         JPanel memoryP = new JPanel();
         memoryP.setLayout(new GridLayout(1, 6, 2, 0));
-        JButton memoryClear = new JButton("MC");
-        JButton memoryReset = new JButton("MR");
-        JButton memoryAdd = new JButton("M+");
-        JButton memorySub = new JButton("M-");
-        JButton memorySave = new JButton("MS");
-        JButton memoryView= new JButton("M∨");
+        JButtonMemory memoryClear = new JButtonMemory("MC");
+        JButtonMemory memoryReset = new JButtonMemory("MR");
+        JButtonMemory memoryAdd = new JButtonMemory("M+");
+        JButtonMemory memorySub = new JButtonMemory("M-");
+        JButtonMemory memorySave = new JButtonMemory("MS");
+        JButtonMemory memoryView= new JButtonMemory("M∨");
 
 //        System.out.println(memoryClear.getPreferredSize());
 //        memoryClear.setPreferredSize(new Dimension(memoryClear.getPreferredSize().width-29, 26));
@@ -145,30 +194,35 @@ public class Calculator extends JFrame {
 
         JPanel numBtnPanel = new JPanel();
         numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
-        JButton num1 = new JButton("1");
-        JButton num2 = new JButton("2");
-        JButton num3 = new JButton("3");
-        JButton num4 = new JButton("4");
-        JButton num5 = new JButton("5");
-        JButton num6 = new JButton("6");
-        JButton num7 = new JButton("7");
-        JButton num8 = new JButton("8");
-        JButton num9 = new JButton("9");
-        JButton num0 = new JButton("0");
-        JButton plus = new JButton("+");
-        JButton minus = new JButton("-");
-        JButton multiply = new JButton("X");
-        JButton divide = new JButton("÷");
-        JButton percent = new JButton("％");
-        JButton equal = new JButton("=");
-        JButton root = new JButton("²√χ");
-        JButton square = new JButton("χ²");
-        JButton fountain = new JButton("¹／χ");
-        JButton clear = new JButton("C");
-        JButton clearEntry = new JButton("CE");
-        JButton back = new JButton("<");
-        JButton comma = new JButton(".");
-        JButton plusAndMinus = new JButton("+/-");
+        JButtonWhite num1 = new JButtonWhite("1");
+        JButtonWhite num2 = new JButtonWhite("2");
+        JButtonWhite num3 = new JButtonWhite("3");
+        JButtonWhite num4 = new JButtonWhite("4");
+        JButtonWhite num5 = new JButtonWhite("5");
+        JButtonWhite num6 = new JButtonWhite("6");
+        JButtonWhite num7 = new JButtonWhite("7");
+        JButtonWhite num8 = new JButtonWhite("8");
+        JButtonWhite num9 = new JButtonWhite("9");
+        JButtonWhite num0 = new JButtonWhite("0");
+        JButtonWhite comma = new JButtonWhite(".");
+        JButtonWhite plusAndMinus = new JButtonWhite("+/-");
+
+        JButtonS plus = new JButtonS("+");
+        JButtonS minus = new JButtonS("-");
+        JButtonS multiply = new JButtonS("X");
+        JButtonS divide = new JButtonS("÷");
+        JButtonS percent = new JButtonS("％");
+        JButtonS root = new JButtonS("²√χ");
+        JButtonS square = new JButtonS("χ²");
+        JButtonS fountain = new JButtonS("¹／χ");
+        JButtonS clear = new JButtonS("C");
+        JButtonS clearEntry = new JButtonS("CE");
+        JButtonS back = new JButtonS("<");
+
+        JButtonS equal = new JButtonS("=");
+        equal.setBackground(Color.BLUE);
+        equal.setForeground(Color.WHITE);
+
 
         num1.setPreferredSize(new Dimension(77, 46));
 
