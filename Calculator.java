@@ -38,8 +38,6 @@ class JButtonS extends JButton {
  * 숫자 버튼
  */
 class JButtonWhite extends JButton {
-    Color c = new Color(0xeeeeee);
-
     public JButtonWhite() {
     }
 
