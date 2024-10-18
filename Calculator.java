@@ -4,6 +4,7 @@ import java.awt.*;
 
 
 class JButtonMemory extends JButton {
+    Font font = new Font("맑은 고딕", Font.PLAIN, 13);
     Color c = new Color(0xeeeeee);
 
     public JButtonMemory() {
@@ -14,6 +15,7 @@ class JButtonMemory extends JButton {
         setBorderPainted(false);
         setFocusPainted(false);
         this.setText(text);
+        setFont(font);
     }
 }
 
@@ -22,6 +24,7 @@ class JButtonMemory extends JButton {
  */
 class JButtonS extends JButton {
     Color c = new Color(0xfbfbfb);
+    Font font = new Font("맑은 고딕", Font.PLAIN, 13);
 
     public JButtonS() {
     }
@@ -31,6 +34,7 @@ class JButtonS extends JButton {
         setBorderPainted(false);
         setFocusPainted(false);
         this.setText(text);
+        setFont(font);
     }
 }
 
@@ -38,6 +42,8 @@ class JButtonS extends JButton {
  * 숫자 버튼
  */
 class JButtonWhite extends JButton {
+    Font font = new Font("맑은 고딕", Font.PLAIN, 18);
+
     public JButtonWhite() {
     }
 
@@ -45,7 +51,9 @@ class JButtonWhite extends JButton {
         super.setBackground(Color.WHITE);
         setBorderPainted(false);
         setFocusPainted(false);
+        setPreferredSize(new Dimension(77, 46));
         this.setText(text);
+        setFont(font);
     }
 }
 
@@ -59,14 +67,19 @@ class JButtonWhite extends JButton {
 public class Calculator extends JFrame {
     Color c = new Color(0xeeeeee);
     public Calculator() {
-
+        String[] memoryArr = {"MC", "MR", "M+", "M-", "MS", "M∨"};
+        String[] numberBtnArr = {
+                "％", "CE", "C", "<",
+                "¹／χ", "χ²", "²√χ", "÷",
+                "7", "8", "9", "X",
+                "4", "5", "6", "-",
+                "1", "2", "3", "+",
+                "+/-", "0", ".", "="
+        };
 
         setTitle("계산기");
         setSize(335, 509);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-//        setLayout(new FlowLayout(FlowLayout.CENTER));
-//        setLayout(new BorderLayout(0, -10));
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.getImage("img/cal.png");
@@ -94,16 +107,19 @@ public class Calculator extends JFrame {
 
 
         JPanel subToolPanel1 = new JPanel();
-        //        Font settingBtnFont = new Font("Dialog", Font.PLAIN, 18)
+        Font settingBtnFont = new Font("맑은 고딕", Font.BOLD, 18);
         JButtonMemory settingBtn = new JButtonMemory("≡");
+        settingBtn.setFont(settingBtnFont);
 
         JLabel calculatorName = new JLabel("표준");
+        calculatorName.setFont(settingBtnFont);
 
         subToolPanel1.add(settingBtn);
         subToolPanel1.add(calculatorName);
 
         JPanel subToolPanel2 = new JPanel();
         JButtonMemory recordBtn = new JButtonMemory("기록");
+        recordBtn.setFont(settingBtnFont);
 
         subToolPanel2.add(recordBtn);
 
@@ -122,14 +138,11 @@ public class Calculator extends JFrame {
     private void showResult() {
         
         JPanel resultMain = new JPanel();
-//        resultMain.setLayout(new BorderLayout(0, 0));
         resultMain.setLayout(new BoxLayout(resultMain, BoxLayout.Y_AXIS));
 
-        
         JPanel previewPanel = new JPanel(new GridLayout());
         previewPanel.setPreferredSize(new Dimension(10, 0));
 
-//        System.out.println(previewPanel.getPreferredSize());
         JTextField preview = new JTextField(27) {
             public void setBorder(Border border) {}
         };
@@ -141,7 +154,7 @@ public class Calculator extends JFrame {
 
         JPanel resultViewPanel = new JPanel(new GridLayout());
         resultViewPanel.setPreferredSize(new Dimension(10, 40));
-//        System.out.println(resultViewPanel.getPreferredSize());
+
         Font resultFont = new Font("Dialog", Font.BOLD, 48);
         JTextField result = new JTextField(11) {
             public void setBorder(Border border) {}
@@ -151,24 +164,19 @@ public class Calculator extends JFrame {
         result.setFont(resultFont);
         result.setEditable(false);
         resultViewPanel.add(result);
-        //        System.out.println(result.getFont());
 
         resultMain.add(previewPanel);
         resultMain.add(resultViewPanel);
 
         add(resultMain);
-
-//        return resultMain;
     }
 
     /**
      * 숫자, 연산, 초기화 등 버튼
      */
     private void showNumBtn() {
+        Font font = new Font("맑은 고딕", Font.PLAIN, 20);
         JPanel mainPanel = new JPanel();
-
-//        mainPanel.setPreferredSize(new Dimension(10, -100));
-//        System.out.println(mainPanel.getPreferredSize());
 
         JPanel memoryP = new JPanel();
         memoryP.setLayout(new GridLayout(1, 6, 2, 0));
@@ -179,9 +187,9 @@ public class Calculator extends JFrame {
         JButtonMemory memorySave = new JButtonMemory("MS");
         JButtonMemory memoryView= new JButtonMemory("M∨");
 
-//        System.out.println(memoryClear.getPreferredSize());
-//        memoryClear.setPreferredSize(new Dimension(memoryClear.getPreferredSize().width-29, 26));
-//        System.out.println(memoryClear.getPreferredSize());
+        System.out.println(memoryClear.getPreferredSize());
+        memoryClear.setPreferredSize(new Dimension(-30, -390));
+        System.out.println(memoryClear.getPreferredSize());
 
         memoryP.add(memoryClear);
         memoryP.add(memoryReset);
@@ -193,6 +201,10 @@ public class Calculator extends JFrame {
         JPanel numBtnPanel = new JPanel();
         numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
         JButtonWhite num1 = new JButtonWhite("1");
+//        num1.addActionListener(e -> {
+//            System.out.println(num1.getText());
+//        });
+
         JButtonWhite num2 = new JButtonWhite("2");
         JButtonWhite num3 = new JButtonWhite("3");
         JButtonWhite num4 = new JButtonWhite("4");
@@ -209,6 +221,7 @@ public class Calculator extends JFrame {
         JButtonS minus = new JButtonS("-");
         JButtonS multiply = new JButtonS("X");
         JButtonS divide = new JButtonS("÷");
+        divide.setFont(font);
         JButtonS percent = new JButtonS("％");
         JButtonS root = new JButtonS("²√χ");
         JButtonS square = new JButtonS("χ²");
@@ -218,15 +231,16 @@ public class Calculator extends JFrame {
         JButtonS back = new JButtonS("<");
 
         JButtonS equal = new JButtonS("=");
+        equal.setFont(font);
         equal.setBackground(Color.BLUE);
         equal.setForeground(Color.WHITE);
 
 
-        num1.setPreferredSize(new Dimension(77, 46));
+//        num1.setPreferredSize(new Dimension(77, 46));
 
         numBtnPanel.add(percent);
-        numBtnPanel.add(clear);
         numBtnPanel.add(clearEntry);
+        numBtnPanel.add(clear);
         numBtnPanel.add(back);
         numBtnPanel.add(fountain);
         numBtnPanel.add(square);
@@ -248,9 +262,6 @@ public class Calculator extends JFrame {
         numBtnPanel.add(num0);
         numBtnPanel.add(comma);
         numBtnPanel.add(equal);
-
-//        System.out.println(num1.getPreferredSize());
-//        System.out.println(memoryClear.getPreferredSize());
 
         mainPanel.add(memoryP, BorderLayout.NORTH);
         mainPanel.add(numBtnPanel, BorderLayout.CENTER);
