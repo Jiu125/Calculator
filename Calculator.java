@@ -24,8 +24,7 @@ class JButtonMemory extends JButton {
  */
 class JButtonS extends JButton {
     Color c = new Color(0xfbfbfb);
-    Font font = new Font("맑은 고딕", Font.PLAIN, 13);
-
+    Font font = new Font("맑은 고딕", Font.PLAIN, 14);
     public JButtonS() {
     }
 
@@ -66,16 +65,16 @@ class JButtonWhite extends JButton {
  */
 public class Calculator extends JFrame {
     Color c = new Color(0xeeeeee);
+    String[] memoryArr = {"MC", "MR", "M+", "M-", "MS", "M∨"};
+    String[] numberPadArr = {
+            "％", "CE", "C", "<",
+            "¹／χ", "χ²", "²√χ", "÷",
+            "7", "8", "9", "×",
+            "4", "5", "6", "-",
+            "1", "2", "3", "+",
+            "+/-", "0", ".", "="
+    };
     public Calculator() {
-        String[] memoryArr = {"MC", "MR", "M+", "M-", "MS", "M∨"};
-        String[] numberBtnArr = {
-                "％", "CE", "C", "<",
-                "¹／χ", "χ²", "²√χ", "÷",
-                "7", "8", "9", "X",
-                "4", "5", "6", "-",
-                "1", "2", "3", "+",
-                "+/-", "0", ".", "="
-        };
 
         setTitle("계산기");
         setSize(335, 509);
@@ -175,93 +174,33 @@ public class Calculator extends JFrame {
      * 숫자, 연산, 초기화 등 버튼
      */
     private void showNumBtn() {
-        Font font = new Font("맑은 고딕", Font.PLAIN, 20);
+        Font font = new Font("맑은 고딕", Font.PLAIN, 21);
         JPanel mainPanel = new JPanel();
 
         JPanel memoryP = new JPanel();
         memoryP.setLayout(new GridLayout(1, 6, 2, 0));
-        JButtonMemory memoryClear = new JButtonMemory("MC");
-        JButtonMemory memoryReset = new JButtonMemory("MR");
-        JButtonMemory memoryAdd = new JButtonMemory("M+");
-        JButtonMemory memorySub = new JButtonMemory("M-");
-        JButtonMemory memorySave = new JButtonMemory("MS");
-        JButtonMemory memoryView= new JButtonMemory("M∨");
+        for(int i=0; i < 6; i++) {
+            JButtonMemory memoryBtn = new JButtonMemory(memoryArr[i]);
+            memoryP.add(memoryBtn);
+        }
 
-        System.out.println(memoryClear.getPreferredSize());
-        memoryClear.setPreferredSize(new Dimension(-30, -390));
-        System.out.println(memoryClear.getPreferredSize());
 
-        memoryP.add(memoryClear);
-        memoryP.add(memoryReset);
-        memoryP.add(memoryAdd);
-        memoryP.add(memorySub);
-        memoryP.add(memorySave);
-        memoryP.add(memoryView);
 
         JPanel numBtnPanel = new JPanel();
         numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
-        JButtonWhite num1 = new JButtonWhite("1");
-//        num1.addActionListener(e -> {
-//            System.out.println(num1.getText());
-//        });
+        for(int i=0; i < 24; i++) {
+            JButton numberPadBtn = new JButtonWhite(numberPadArr[i]);
+            if(i < 8)
+                numberPadBtn = new JButtonS(numberPadArr[i]);
+            else if(i % 4 ==3)
+                numberPadBtn.setFont(font);
+            if (i == 23){
+                numberPadBtn.setBackground(Color.BLUE);
+                numberPadBtn.setForeground(Color.WHITE);
+            }
 
-        JButtonWhite num2 = new JButtonWhite("2");
-        JButtonWhite num3 = new JButtonWhite("3");
-        JButtonWhite num4 = new JButtonWhite("4");
-        JButtonWhite num5 = new JButtonWhite("5");
-        JButtonWhite num6 = new JButtonWhite("6");
-        JButtonWhite num7 = new JButtonWhite("7");
-        JButtonWhite num8 = new JButtonWhite("8");
-        JButtonWhite num9 = new JButtonWhite("9");
-        JButtonWhite num0 = new JButtonWhite("0");
-        JButtonWhite comma = new JButtonWhite(".");
-        JButtonWhite plusAndMinus = new JButtonWhite("+/-");
-
-        JButtonS plus = new JButtonS("+");
-        JButtonS minus = new JButtonS("-");
-        JButtonS multiply = new JButtonS("X");
-        JButtonS divide = new JButtonS("÷");
-        divide.setFont(font);
-        JButtonS percent = new JButtonS("％");
-        JButtonS root = new JButtonS("²√χ");
-        JButtonS square = new JButtonS("χ²");
-        JButtonS fountain = new JButtonS("¹／χ");
-        JButtonS clear = new JButtonS("C");
-        JButtonS clearEntry = new JButtonS("CE");
-        JButtonS back = new JButtonS("<");
-
-        JButtonS equal = new JButtonS("=");
-        equal.setFont(font);
-        equal.setBackground(Color.BLUE);
-        equal.setForeground(Color.WHITE);
-
-
-//        num1.setPreferredSize(new Dimension(77, 46));
-
-        numBtnPanel.add(percent);
-        numBtnPanel.add(clearEntry);
-        numBtnPanel.add(clear);
-        numBtnPanel.add(back);
-        numBtnPanel.add(fountain);
-        numBtnPanel.add(square);
-        numBtnPanel.add(root);
-        numBtnPanel.add(divide);
-        numBtnPanel.add(num7);
-        numBtnPanel.add(num8);
-        numBtnPanel.add(num9);
-        numBtnPanel.add(multiply);
-        numBtnPanel.add(num4);
-        numBtnPanel.add(num5);
-        numBtnPanel.add(num6);
-        numBtnPanel.add(minus);
-        numBtnPanel.add(num1);
-        numBtnPanel.add(num2);
-        numBtnPanel.add(num3);
-        numBtnPanel.add(plus);
-        numBtnPanel.add(plusAndMinus);
-        numBtnPanel.add(num0);
-        numBtnPanel.add(comma);
-        numBtnPanel.add(equal);
+            numBtnPanel.add(numberPadBtn);
+        }
 
         mainPanel.add(memoryP, BorderLayout.NORTH);
         mainPanel.add(numBtnPanel, BorderLayout.CENTER);
