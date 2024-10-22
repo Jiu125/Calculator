@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
@@ -12,10 +14,19 @@ public class CalculatorActionListener {
     ActionListener add, pop, printResult;
 }
 
-class buttonActionListener {
-    ActionListener addNum, back, clear, clearEntry, plus, minus, multiply, divide, percent, pow, root, inverse;
-    // 클릭하면 addNum => 변수.getText()로 결과 바꿀 수 잇는 것을 확인 이걸로 진행하고
-    // 스택을 만들어서 미리보기를 구성하자 물론 연산도 스택으로 구현해야 할듯,,,?
+class addNum implements ActionListener {
+//    ActionListener addNum, back, clear, clearEntry, plus, minus, multiply, divide, percent, pow, root, inverse;
 
+    JButton btn;
+    JTextField text;
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btn || e.getSource() == text) {
+            String name = text.getText();
+            int val = Integer.parseInt(name);
+            text.setText("" + val);
+            text.requestFocus();
+        }
+    }
 }

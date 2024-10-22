@@ -1,14 +1,14 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+import java.util.Stack;
 
 class JButtonMemory extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 13);
     Color c = new Color(0xeeeeee);
-
-    public JButtonMemory() {
-    }
 
     public JButtonMemory(String text) {
         super.setBackground(c);
@@ -16,6 +16,12 @@ class JButtonMemory extends JButton {
         setFocusPainted(false);
         this.setText(text);
         setFont(font);
+
+        addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e.getSource().toString());
+            }
+        });
     }
 }
 
@@ -25,16 +31,36 @@ class JButtonMemory extends JButton {
 class JButtonS extends JButton {
     Color c = new Color(0xfbfbfb);
     Font font = new Font("맑은 고딕", Font.PLAIN, 14);
-    public JButtonS() {
-    }
 
-    public JButtonS(String text) {
+    public JButtonS(String text, JTextField  result, JTextField  privew, Stack resultStack, Stack preveiwStack) {
         super.setBackground(c);
         setBorderPainted(false);
         setFocusPainted(false);
         this.setText(text);
         setFont(font);
+
+        addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(Objects.equals(text, "C")){
+                    preveiwStack.clear();
+                    resultStack.clear();
+                    privew.setText("");
+                    result.setText("0");
+                }
+                if(Objects.equals(text, "CE")){
+                    resultStack.clear();
+                    result.setText("0");
+                }
+
+
+
+
+
+            }
+        });
     }
+
+
 }
 
 /**
@@ -43,27 +69,42 @@ class JButtonS extends JButton {
 class JButtonWhite extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 18);
 
-    public JButtonWhite() {
-    }
-
-    public JButtonWhite(String text) {
+    public JButtonWhite(String text, JTextField  textField, Stack stack) {
         super.setBackground(Color.WHITE);
         setBorderPainted(false);
         setFocusPainted(false);
+        setFont(font);
         setPreferredSize(new Dimension(77, 46));
         this.setText(text);
-        setFont(font);
+
+        this.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String btnStr = getText();
+                if (btnStr.matches("\\d+")) {  // \\d+는 하나 이상의 숫자를 의미하는 정규식
+                    stack.push(btnStr);
+
+                    // 스택의 모든 문자열을 합침
+                    String str = "";
+                    for (int i = 0; i < stack.size(); i++) {
+                        str += stack.get(i);
+                    }
+                    // 숫자일 때만 textField의 텍스트를 설정
+                    textField.setText(str);
+                }
+            }
+        });
     }
 }
 
 /**
  *  계산기 디자인 파일
- *  기본 배경 RGB : r=238,g=238,b=238
  *  코드 구조 참고
  * @link : https://github.com/tejasmanohar/jframe-calculator/blob/master/src/calculator/Calculator.java
  *
  */
 public class Calculator extends JFrame {
+    Stack<String> result = new Stack<>();
+    Stack<String> preResult = new Stack<>();
     Color c = new Color(0xeeeeee);
     String[] memoryArr = {"MC", "MR", "M+", "M-", "MS", "M∨"};
     String[] numberPadArr = {
@@ -74,8 +115,9 @@ public class Calculator extends JFrame {
             "1", "2", "3", "+",
             "+/-", "0", ".", "="
     };
-    public Calculator() {
+    JTextField preview, resultView;
 
+    public Calculator() {
         setTitle("계산기");
         setSize(335, 509);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -88,8 +130,6 @@ public class Calculator extends JFrame {
         showResult();
         showNumBtn();
 
-        System.out.println(c.getRed() + " " + c.getGreen() + " " + c.getBlue());
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -99,6 +139,11 @@ public class Calculator extends JFrame {
      *  showResult()를 여기에 넣어서 같은 panel에 두고 layout 설정해보자.
      */
     private void showMenu() {
+        ImageIcon recordImg = new ImageIcon("img/record.png");
+        Image img = recordImg.getImage();
+        Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
+
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new GridLayout());
         JPanel subToolBtnPanel = new JPanel(new BorderLayout());
@@ -108,6 +153,7 @@ public class Calculator extends JFrame {
         JPanel subToolPanel1 = new JPanel();
         Font settingBtnFont = new Font("맑은 고딕", Font.BOLD, 18);
         JButtonMemory settingBtn = new JButtonMemory("≡");
+        settingBtn.setPreferredSize(new Dimension(46, 20));
         settingBtn.setFont(settingBtnFont);
 
         JLabel calculatorName = new JLabel("표준");
@@ -117,7 +163,11 @@ public class Calculator extends JFrame {
         subToolPanel1.add(calculatorName);
 
         JPanel subToolPanel2 = new JPanel();
-        JButtonMemory recordBtn = new JButtonMemory("기록");
+        JButton recordBtn = new JButton(changeIcon);
+        recordBtn.setBackground(new Color(0xeeeeee));
+        recordBtn.setBorderPainted(false);
+        recordBtn.setFocusPainted(false);
+        recordBtn.setPreferredSize(new Dimension(20, 20));
         recordBtn.setFont(settingBtnFont);
 
         subToolPanel2.add(recordBtn);
@@ -135,14 +185,13 @@ public class Calculator extends JFrame {
      *
      */
     private void showResult() {
-        
         JPanel resultMain = new JPanel();
-        resultMain.setLayout(new BoxLayout(resultMain, BoxLayout.Y_AXIS));
+        resultMain.setLayout(new GridLayout(2, 1));
 
         JPanel previewPanel = new JPanel(new GridLayout());
         previewPanel.setPreferredSize(new Dimension(10, 0));
 
-        JTextField preview = new JTextField(27) {
+        preview = new JTextField(27) {
             public void setBorder(Border border) {}
         };
         preview.setText("0001");
@@ -152,17 +201,17 @@ public class Calculator extends JFrame {
         previewPanel.add(preview);
 
         JPanel resultViewPanel = new JPanel(new GridLayout());
-        resultViewPanel.setPreferredSize(new Dimension(10, 40));
+        resultViewPanel.setPreferredSize(new Dimension(50, 40));
 
         Font resultFont = new Font("Dialog", Font.BOLD, 48);
-        JTextField result = new JTextField(11) {
+        resultView = new JTextField(11) {
             public void setBorder(Border border) {}
         };
-        result.setText("0002");
-        result.setHorizontalAlignment(SwingConstants.RIGHT);
-        result.setFont(resultFont);
-        result.setEditable(false);
-        resultViewPanel.add(result);
+        resultView.setText("0002");
+        resultView.setHorizontalAlignment(SwingConstants.RIGHT);
+        resultView.setFont(resultFont);
+        resultView.setEditable(false);
+        resultViewPanel.add(resultView);
 
         resultMain.add(previewPanel);
         resultMain.add(resultViewPanel);
@@ -184,19 +233,45 @@ public class Calculator extends JFrame {
             memoryP.add(memoryBtn);
         }
 
-
-
         JPanel numBtnPanel = new JPanel();
         numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
         for(int i=0; i < 24; i++) {
-            JButton numberPadBtn = new JButtonWhite(numberPadArr[i]);
+            JButton numberPadBtn = new JButtonWhite(numberPadArr[i], resultView, result);
             if(i < 8)
-                numberPadBtn = new JButtonS(numberPadArr[i]);
-            else if(i % 4 ==3)
+                numberPadBtn = new JButtonS(numberPadArr[i], resultView, preview, result, preResult);
+            else if(i % 4 ==3){
+                numberPadBtn = new JButtonS(numberPadArr[i], resultView, preview, result, preResult);
                 numberPadBtn.setFont(font);
+            }
+
             if (i == 23){
                 numberPadBtn.setBackground(Color.BLUE);
                 numberPadBtn.setForeground(Color.WHITE);
+                numberPadBtn.setFont(font);
+                numberPadBtn.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        String str = "";
+                        for(int i=0; i < result.size(); i++) {
+                            str += result.get(i);
+                        }
+                        String num = str.replaceFirst("^0+", "");
+
+                        if(preResult.isEmpty() || num == "") {
+                            result.clear();
+                            preview.setText(String.format("0 %s", numberPadArr[23]));
+                            preResult.clear();
+                            result.clear();
+                        }
+                        preResult.push(num);
+                        preview.setText(String.format("%s %s", num, numberPadArr[23]));
+
+                        System.out.println(preResult.isEmpty());
+                        System.out.println(preResult.size());
+                        System.out.println(preResult);
+
+                        result.clear();
+                    }
+                });
             }
 
             numBtnPanel.add(numberPadBtn);
@@ -206,6 +281,11 @@ public class Calculator extends JFrame {
         mainPanel.add(numBtnPanel, BorderLayout.CENTER);
 
         add(mainPanel);
+    }
+
+    public void addNum(JButton btn) {
+        String num = btn.getText();
+
     }
 
     public static void main(String[] args) {
