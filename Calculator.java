@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 import java.util.Stack;
+import java.text.DecimalFormat;
 
 class JButtonMemory extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 13);
@@ -84,14 +85,17 @@ class JButtonS extends JButton {
 //                     비어있을 때는 => "0 + " 이게 뜸
                     if (Objects.equals(result.getText(), "0")) {
 
-                        preveiwStack.push("+");
-                        privew.setText(String.join(" ", preveiwStack));
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+")) {
+                            preveiwStack.push("+");
+                            privew.setText(String.join(" ", preveiwStack));
+                        }
                         privew.setText("0 +  ");
                         temp.clear();
                     }
                     else if (!preveiwStack.isEmpty() || num != 0) { // 'A + ' => "3 + " 이케 떠야함
                         preveiwStack.push(result.getText());
-                        preveiwStack.push("+");
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+"))
+                            preveiwStack.push("+");
                         privew.setText(String.format("%s +  ", result.getText()));
                         temp.clear();
                     }
@@ -101,18 +105,69 @@ class JButtonS extends JButton {
                 if (Objects.equals(text, "-")) {
 
                     if (Objects.equals(result.getText(), "0")) {
-                        preveiwStack.push("-");
-                        privew.setText(String.join(" ", preveiwStack));
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-")) {
+                            preveiwStack.push("-");
+                            privew.setText(String.join(" ", preveiwStack));
+                        }
                         privew.setText("0 -  ");
                         temp.clear();
                     }
                     else if (!preveiwStack.isEmpty() || num != 0) {
                         preveiwStack.push(result.getText());
-                        preveiwStack.push("-");
+
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-"))
+                            preveiwStack.push("-");
+
                         privew.setText(String.format("%s -  ", result.getText()));
                         temp.clear();
                     }
                 }
+
+                // "*" 연산 처리
+                if (Objects.equals(text, "×")) {
+
+                    if (Objects.equals(result.getText(), "0")) {
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×")) {
+                            preveiwStack.push("×");
+                            privew.setText(String.join(" ", preveiwStack));
+                        }
+                        privew.setText("0 *  ");
+                        temp.clear();
+                    }
+                    else if (!preveiwStack.isEmpty() || num != 0) {
+                        preveiwStack.push(result.getText());
+
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×"))
+                            preveiwStack.push("×");
+
+                        privew.setText(String.format("%s ×  ", result.getText()));
+                        temp.clear();
+                    }
+                }
+
+                // "/" 연산 처리
+                if (Objects.equals(text, "÷")) {
+
+                    if (Objects.equals(result.getText(), "0")) {
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷")) {
+                            preveiwStack.push("*");
+                            privew.setText(String.join(" ", preveiwStack));
+                        }
+                        privew.setText("0 ÷  ");
+                        temp.clear();
+                    }
+                    else if (!preveiwStack.isEmpty() || num != 0) {
+                        preveiwStack.push(result.getText());
+
+                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷"))
+                            preveiwStack.push("÷");
+
+                        privew.setText(String.format("%s ÷  ", result.getText()));
+                        temp.clear();
+                    }
+                }
+
+
             }
         });
     }
@@ -190,6 +245,117 @@ public class Calculator extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    /**
+     * float 값의 소수점 이하가 0일 때 정수로 출력하고, 소수점이 있을 때는 소수점을 표시하는 코드
+     * @param number : 결과 값
+     * @return 결과 값의 소수점 여부와 0의 여부를 확인하여 가공한 값
+     */
+    public static String formatDouble(double number) {
+        // 소수점 이하가 0인지 확인
+        if (number == (long) number) {
+            return String.format("%d", (long) number);
+        } else {
+            return String.format("%s", number);
+        }
+    }
+
+    /**
+     *
+     * 계산기 스택의 기호를 찾는 방법을 고안하여 GPT를 사용해 적용
+     */
+    public void arithmetic(Stack preResult) {
+        // 연산자를 찾기 위해 preResult 리스트를 순회
+        String operation = null;
+        int position = -1;
+        DecimalFormat df = new DecimalFormat("0.##");
+
+        // 연산자 찾기
+        for (int i = preResult.size()-1; i >= 0; i--) {
+            String current = (String) preResult.get(i);
+            if (isOperator(current)) {
+                operation = current;
+                position = i ;
+                break;
+            }
+        }
+
+        int index = position;
+
+
+        System.out.println("index: " + index);
+        System.out.println("position: " + position);
+        System.out.println("preResult.size: " + preResult.size());
+//        System.out.println("index - 1: " + preResult.get(index - 1));
+        System.out.println("index: " + preResult.get(index));
+        System.out.println(preResult);
+
+        Double num2 = Double.parseDouble(String.valueOf(preResult.get(index + 1))); // 뒤에 있는 수
+        if ((index - 1) == -1) {
+            preview.setText(String.format("0 %s %s =  ", operation, formatDouble(num2)));
+            resultView.setText(String.format("%s", formatDouble(num2)));
+        }
+        else {
+            Double num1 = Double.parseDouble(String.valueOf(preResult.get(index - 1))); // 앞에 있는 수
+            Double num3;
+
+            if (position == -1) {
+                preview.setText(String.format("%s =  ", resultView.getText()));
+            } else {
+                num3 = Double.parseDouble(resultView.getText());
+
+                Double result = calculateResult(num1, num2, operation);
+
+                // 계산 결과가 에러인 경우 (예: 0으로 나누기)
+                if (result == Integer.MIN_VALUE) {
+                    preview.setText("0으로 나눌 수 없습니다");
+                    return;
+                }
+
+                System.out.println("num2: "+num2);
+                System.out.println("num3: "+num3);
+
+                // num3 값에 따라 결과를 설정하고 표시
+                if (num2.equals(num3)) {
+                    preview.setText(String.format("%s %s %s =  ", formatDouble(num1), operation, formatDouble(num2)));
+                    resultView.setText(String.format("%s", formatDouble(result)));
+                } else if (preResult.get(index - 1) == null) {
+                    preview.setText(String.format("0 %s %s =  ", operation, formatDouble(num2)));
+                    resultView.setText(String.format("%s", formatDouble(result)));
+                } else {
+                    String doubleResult = formatDouble(calculateResult(num3, num2, operation));
+                    preview.setText(String.format("%s %s %s =  ", formatDouble(num3), operation, formatDouble(num2)));
+                    resultView.setText(String.format("%s", doubleResult));
+                }
+            }
+        }
+        temp.clear();
+    }
+
+    // 연산자인지 확인하는 헬퍼 메소드
+    private boolean isOperator(String str) {
+        return "+".equals(str) || "-".equals(str) ||
+                "×".equals(str) || "÷".equals(str);
+    }
+
+    // 실제 계산을 수행하는 헬퍼 메소드
+    private double calculateResult(Double num1, Double num2, String operation) {
+        switch (operation) {
+            case "+":
+                return num1 + num2;
+            case "-":
+                return num1 - num2;
+            case "×":
+                return num1 * num2;
+            case "÷":
+                if (num2 != 0) {
+                    return  (double) num1 / num2;
+                }
+                return Double.MIN_VALUE; // 에러 표시를 위한 특별한 값
+            default:
+                return Double.MIN_VALUE;
+        }
     }
 
     /**
@@ -326,8 +492,8 @@ public class Calculator extends JFrame {
                         // 여기까지 메소드
 
                         preResult.push(resultView.getText());
-                        System.out.println(num);
-                        System.out.println(preResult);
+//                        System.out.println(num);
+//                        System.out.println(preResult);
 
                         // 아무것도 없을 시 미리보기에 0 = 출력
                         if(Objects.equals(resultView.getText(), "0")) {
@@ -336,30 +502,34 @@ public class Calculator extends JFrame {
                             preResult.clear();
                         }
 
-                        // 더하기 연산 출력
-                        int position = preResult.search("+");
-                        int index = preResult.size() - position;
-                        int num1 = Integer.parseInt(preResult.get(index - 1)); // 앞에 있는 수
-                        int num2; // 뒤에 있는 수
+                        arithmetic(preResult);
 
-                        if(position == -1) {
-                            preview.setText(String.format("%s =  ", resultView.getText()));
-                        }else  { // 나중에 예외 처리 다시
-                            num2 = Integer.parseInt(resultView.getText());
-
-                            preview.setText(String.format("%d + %d =  ", num2, num1));
-                            resultView.setText(String.format("%d", num1 + num2));
-
-                        }
-
-
-
+//                        int position = preResult.search("+");
+//                        int index = preResult.size() - position;
+//                        int num1 = Integer.parseInt(preResult.get(index - 1)); // 앞에 있는 수
+//                        int num2 = Integer.parseInt(preResult.get(index + 1)); // 뒤에 있는 수
+//                        int num3;
+//
+//                        if(position == -1) {
+//                            preview.setText(String.format("%s =  ", resultView.getText()));
+//                        }else  {
+//
+//                            num3 = Integer.parseInt(resultView.getText());
+//
+//                            if (num3 < num1+num2){
+//                                preview.setText(String.format("%d + %d =  ", num1, num2));
+//                                resultView.setText(String.format("%d", num1 + num2));
+//                            }
+//                            else {
+//                                preview.setText(String.format("%d + %d =  ", num3, num2));
+//                                resultView.setText(String.format("%d", num2 + num3));
+//                            }
+//                        }
 //                        System.out.println("나가는 것: "+resultView.getText());
 //                        System.out.println(preResult.isEmpty());
                         System.out.println("temp: "+temp);
                         System.out.println("result "+ result);
                         System.out.println(preResult);
-
 
                     }
                 });
@@ -374,10 +544,7 @@ public class Calculator extends JFrame {
         add(mainPanel);
     }
 
-    public void addNum(JButton btn) {
-        String num = btn.getText();
 
-    }
 
     public static void main(String[] args) {
         new Calculator();
