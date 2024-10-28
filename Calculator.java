@@ -57,12 +57,12 @@ class JButtonS extends JButton {
                     strNum += temp.get(i);
                 }
 
-                int num;
+                double num;
                 String numStr = strNum.replaceFirst("^0+", ""); // 0은 한 번만 나오게 가공
                 if(numStr == "" || numStr.isBlank()) // 문자의 가독성을 높이는 가공
                     num = 0;
                 else
-                    num = Integer.parseInt(numStr);
+                    num = Double.parseDouble(numStr);
 
                 // 퍼센트 연산 기능 처리
                 if(Objects.equals(text, "％")){
@@ -215,8 +215,6 @@ class JButtonS extends JButton {
                         temp.clear();
                     }
                 }
-
-
             }
         });
     }
@@ -237,7 +235,12 @@ class JButtonWhite extends JButton {
         }
     }
 
-    public JButtonWhite(String text, JTextField  result, JTextField preview, Stack temp) {
+    private boolean isOperator(String str) {
+        return "+".equals(str) || "-".equals(str) ||
+                "×".equals(str) || "÷".equals(str);
+    }
+
+    public JButtonWhite(String text, JTextField  result, JTextField preview, Stack temp, Stack preveiwStack) {
         super.setBackground(Color.WHITE);
         setBorderPainted(false);
         setFocusPainted(false);
@@ -264,10 +267,38 @@ class JButtonWhite extends JButton {
 
                 // 부호 바꾸기 연산 처리 (negate)
                 if(Objects.equals(text, "+/-")){
+                    String operation = null;
+                    int position = -1;
+
+                    // 연산자 찾기
+                    for (int i = preveiwStack.size()-1; i >= 0; i--) {
+                        String current = (String) preveiwStack.get(i);
+                        if (isOperator(current)) {
+                            operation = current;
+                            position = i ;
+                            break;
+                        }
+                    }
+
                     double number = Double.parseDouble(result.getText());
-                    preview.setText(String.format("negate(%s)", formatDouble(number)));
+                    if (position != -1) {
+                        Double num1 = Double.parseDouble(String.valueOf(preveiwStack.get(position - 1)));
+                        preview.setText(String.format("%s %s negate(%s) =",formatDouble(num1), operation, formatDouble(number)));
+                    }
                     number *= -1;
                     result.setText(String.format("%s", formatDouble(number)));
+                }
+
+                // 소수점 연산 처리
+                if (Objects.equals(text, ".")) {
+                    String currentText = result.getText();
+
+                    // 소수점이 이미 존재하는지 확인
+                    if (!currentText.contains(".")) {
+                        // 소수점이 없으면 추가
+                        temp.push(".");
+                        result.setText(currentText + ".");
+                    }
                 }
             }
         });
@@ -336,7 +367,6 @@ public class Calculator extends JFrame {
         // 연산자를 찾기 위해 preResult 리스트를 순회
         String operation = null;
         int position = -1;
-        DecimalFormat df = new DecimalFormat("0.##");
 
         // 연산자 찾기
         for (int i = preResult.size()-1; i >= 0; i--) {
@@ -349,14 +379,6 @@ public class Calculator extends JFrame {
         }
 
         int index = position;
-
-
-//        System.out.println("index: " + index);
-//        System.out.println("position: " + position);
-//        System.out.println("preResult.size: " + preResult.size());
-//        System.out.println("index - 1: " + preResult.get(index - 1));
-//        System.out.println("index: " + preResult.get(index));
-//        System.out.println(preResult);
 
         Double num2 = Double.parseDouble(String.valueOf(preResult.get(index + 1))); // 뒤에 있는 수
         if ((index - 1) == -1) {
@@ -526,7 +548,7 @@ public class Calculator extends JFrame {
         JPanel numBtnPanel = new JPanel();
         numBtnPanel.setLayout(new GridLayout(6, 4, 3, 3));
         for(int i=0; i < 24; i++) {
-            JButton numberPadBtn = new JButtonWhite(numberPadArr[i], resultView, preview,temp);
+            JButton numberPadBtn = new JButtonWhite(numberPadArr[i], resultView, preview,temp, preResult);
             if(i < 8)
                 numberPadBtn = new JButtonS(numberPadArr[i], resultView, preview, temp, preResult);
             else if(i % 4 ==3){
@@ -535,7 +557,7 @@ public class Calculator extends JFrame {
             }
 
             if (i == 23){
-                numberPadBtn.setBackground(Color.BLUE);
+                numberPadBtn.setBackground(new Color(0x00649E));
                 numberPadBtn.setForeground(Color.WHITE);
                 numberPadBtn.setFont(font);
                 numberPadBtn.addActionListener(new ActionListener() {
