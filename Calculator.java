@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 import java.util.Stack;
-import java.text.DecimalFormat;
 
 class JButtonMemory extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 13);
