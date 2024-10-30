@@ -5,21 +5,55 @@ import java.awt.event.ActionListener;
 import java.util.Objects;
 import java.util.Stack;
 
+
 /**
- * 연산에 필요한 이벤트들을 담을 파일
+ * 계산기 메모리 버튼의 이벤트와 초기화 설정하는 클래스입니다.
+ * 'JButton' 클래스를 상속 받고 메모리 버튼에 대한 이벤트를 담고 있습니다.
+ *
+ * @author 2023011794_Ji Woo Park (gav705@naver.com)
+ * @version 0.6.2
+ * @since 0.0.1
+ *
+ * {@code @created} 2024-10-13
+ * {@code @lastModified} 2024-10-30
+ *
+ * {@code @changelog}
+ * <ul>
+ *   <li>2024-10-22: 최초 생성</li>
+ *   <li>2024-10-18: 메모리 버튼 기능 생성 </li>
+ *   <li>2024-10-30: 오류 개선 </li>
+ * </ul>
  */
-public class CalculatorBtnActionListener {
-    CalculatorBtnActionListener() {
-        Stack<String> stackStr = new Stack<>();
-    }
-
-    ActionListener add, pop, printResult;
-}
-
 class JButtonMemory extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 13);
     Color c = new Color(0xeeeeee);
 
+
+    /**
+     * `JButtonMemory` 생성자: 메모리 관련 기능을 수행하는 버튼을 생성합니다.
+     *
+     * <p>
+     * 이 생성자는 지정된 텍스트와 `resultView`, 메모리 스택(`memory`) 및 메모리 임시 스택(`memoryTemp`)을 사용하여
+     * 버튼의 초기 설정과 액션 리스너를 구성합니다.
+     * </p>
+     *
+     * @param text       버튼에 표시될 텍스트(예: "MC", "MR", "M+", "M-", "MS" 등).
+     * @param resultView 결과를 표시하는 `JTextField`.
+     * @param memory     메모리 값을 저장하는 스택.
+     * @param memoryTemp 임시 메모리 스택.
+     *
+     * <p>
+     * 액션 리스너 기능:
+     * <ul>
+     *   <li>MC: 메모리 스택 초기화</li>
+     *   <li>MR: 메모리에서 가장 최근 값을 불러와 `resultView`에 표시</li>
+     *   <li>M+: `resultView` 값과 메모리 값을 더하여 저장</li>
+     *   <li>M-: `resultView` 값과 메모리 값을 빼서 저장</li>
+     *   <li>MS: `resultView` 값을 메모리에 저장</li>
+     *   <li>M∨: 메모리 값을 표시 (추후 구현 예정)</li>
+     * </ul>
+     * </p>
+     */
     public JButtonMemory(String text, JTextField resultView, Stack memory, Stack memoryTemp) {
         super.setBackground(c);
         setBorderPainted(false);
@@ -95,12 +129,35 @@ class JButtonMemory extends JButton {
     }
 }
 
-
+/**
+ * 계산기 메모리 버튼의 이벤트와 초기화 설정하는 클래스입니다.
+ * 'JButton' 클래스를 상속 받고 메모리 버튼에 대한 이벤트를 담고 있습니다.
+ *
+ * @author 2023011794_Ji Woo Park (gav705@naver.com)
+ * @version 0.8.7
+ * @since 0.0.1
+ *
+ * {@code @created} 2024-10-22
+ * {@code @lastModified} 2024-10-30
+ *
+ * {@code @changelog}
+ * <ul>
+ *   <li>2024-10-22: 최초 생성</li>
+ *   <li>2024-10-28: 버튼 기능 생성 </li>
+ *   <li>2024-10-30: 오류 개선 </li>
+ * </ul>
+ */
 class JButtonWhite extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 18);
 
+    /**
+     * 주어진 숫자를 형식화하여 문자열로 반환합니다.
+     *
+     * @param number 형식화할 숫자
+     * @return 소수점 이하가 0일 경우는 천 단위 구분 기호가 있는 정수 형태의 문자열을,
+     *         그렇지 않은 경우는 소수점이 포함된 문자열을 반환합니다.
+     */
     public static String formatDouble(double number) {
-        // 소수점 이하가 0인지 확인
         if (number == (long) number) {
             return String.format("%,d", (long) number);
         } else {
@@ -108,11 +165,36 @@ class JButtonWhite extends JButton {
         }
     }
 
+    /**
+     * 주어진 문자열이 수학 연산자인지 확인합니다.
+     *
+     * @param str 확인할 문자열
+     * @return 문자열이 "+", "-", "×", 또는 "÷" 중 하나이면 true를 반환하고,
+     *         그렇지 않으면 false를 반환합니다.
+     */
     private boolean isOperator(String str) {
         return "+".equals(str) || "-".equals(str) ||
                 "×".equals(str) || "÷".equals(str);
     }
 
+    /**
+     * JButtonWhite 클래스의 생성자로, 버튼의 속성을 설정하고 액션 리스너를 추가합니다.
+     *
+     * <p>
+     * 액션 리스너 기능:
+     * <ul>
+     *   <li>숫자 버튼: 입력된 숫자를 스택에 추가하고, 결과 텍스트 필드에 표시</li>
+     *   <li>부호 바꾸기: 현재 숫자의 부호를 반전시킴</li>
+     *   <li>소수점 버튼: 소수점을 추가하며, 이미 존재할 경우 추가하지 않음</li>
+     * </ul>
+     * </p>
+     *
+     * @param text 버튼에 표시될 텍스트
+     * @param result 결과를 표시하는 JTextField
+     * @param preview 계산 과정을 보여주는 JTextField
+     * @param temp 입력된 값을 저장하는 Stack
+     * @param preveiwStack 계산 과정을 저장하는 Stack
+     */
     public JButtonWhite(String text, JTextField  result, JTextField preview, Stack temp, Stack preveiwStack) {
         super.setBackground(Color.WHITE);
         setBorderPainted(false);
@@ -202,10 +284,36 @@ class JButtonWhite extends JButton {
     }
 }
 
+
+/**
+ * 계산기 연산 버튼의 이벤트와 초기화 설정하는 클래스입니다.
+ * 'JButton' 클래스를 상속 받고 연산 버튼에 대한 이벤트를 담고 있습니다.
+ *
+ * @author 2023011794_Ji Woo Park (gav705@naver.com)
+ * @version 0.12.20
+ * @since 0.0.1
+ *
+ * {@code @created} 2024-10-22
+ * {@code @lastModified} 2024-10-31
+ *
+ * {@code @changelog}
+ * <ul>
+ *   <li>2024-10-22: 최초 생성 </li>
+ *   <li>2024-10-28: 버튼 기능 모두 구현 </li>
+ *   <li>2024-10-31: 기능 오류 개선 </li>
+ * </ul>
+ */
 class JButtonS extends JButton {
     Color c = new Color(0xfbfbfb);
     Font font = new Font("맑은 고딕", Font.PLAIN, 14);
 
+    /**
+     * 주어진 숫자를 형식화하여 문자열로 반환합니다.
+     *
+     * @param number 형식화할 숫자
+     * @return 소수점 이하가 0일 경우는 천 단위 구분 기호가 있는 정수 형태의 문자열을,
+     *         그렇지 않은 경우는 소수점이 포함된 문자열을 반환합니다.
+     */
     public static String formatDouble(double number) {
         // 소수점 이하가 0인지 확인
         if (number == (long) number) {
@@ -215,6 +323,29 @@ class JButtonS extends JButton {
         }
     }
 
+    /**
+     * JButtonS 클래스의 생성자로, 버튼의 속성을 설정하고 액션 리스너를 추가합니다.
+     *
+     * <p>
+     * 액션 리스너 기능:
+     * <ul>
+     *   <li>퍼센트 연산: 결과를 백분율로 계산</li>
+     *   <li>전체 리셋: 스택과 텍스트 필드를 초기화</li>
+     *   <li>결과창 리셋: 입력 값을 지우고 초기화</li>
+     *   <li>지우기: 마지막 입력을 삭제</li>
+     *   <li>1/(A): 입력된 숫자의 역수를 계산</li>
+     *   <li>sqr: 입력된 숫자의 제곱을 계산</li>
+     *   <li>²√: 입력된 숫자의 제곱근을 계산</li>
+     *   <li>기본 연산: 더하기, 빼기, 곱하기, 나누기 연산 처리</li>
+     * </ul>
+     * </p>
+     *
+     * @param text 버튼에 표시될 텍스트
+     * @param result 결과를 표시하는 JTextField
+     * @param privew 계산 과정을 보여주는 JTextField
+     * @param temp 입력된 값을 저장하는 Stack
+     * @param preveiwStack 계산 과정을 저장하는 Stack
+     */
     public JButtonS(String text, JTextField  result, JTextField  privew, Stack temp, Stack preveiwStack) {
         super.setBackground(c);
         setBorderPainted(false);
