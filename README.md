@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=waving&fontColor=e9ecef&color=BDBDC8&height=200&fontSize=60&text=Calculator&desc=2023011794_JiWoo-Park&descAlignY=75&descAlign=50)
+![header](https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=200&fontSize=60&text=Calculator&desc=2023011794_JiWoo-Park&descAlignY=75&descAlign=50)
 
 # Introduction
 
