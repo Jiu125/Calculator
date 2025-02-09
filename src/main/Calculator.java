@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -314,7 +316,7 @@ public class Calculator extends JFrame {
         resultMain.setLayout(new GridLayout(2, 1));
 
         JPanel previewPanel = new JPanel(new GridLayout());
-        previewPanel.setPreferredSize(new Dimension(10, 0));
+//        previewPanel.setPreferredSize(new Dimension(10, 0));
 
         preview = new JTextField(27) {
             public void setBorder(Border border) {}
@@ -381,7 +383,7 @@ public class Calculator extends JFrame {
         JButtonMemory mAddBtn = new JButtonMemory(memoryArr[2], resultView, memory, memoryTemp);
         JButtonMemory mSubBtn = new JButtonMemory(memoryArr[3], resultView, memory, memoryTemp);
         JButtonMemory msBtn = new JButtonMemory(memoryArr[4], resultView, memory, memoryTemp);
-//        JButtonMemory meViewBtn = new JButtonMemory(memoryArr[5], resultView, memory, memoryTemp);
+//        java.JButtonMemory meViewBtn = new java.JButtonMemory(memoryArr[5], resultView, memory, memoryTemp);
 
         mcBtn.setEnabled(false);
         mrBtn.setEnabled(false);
@@ -501,8 +503,4 @@ public class Calculator extends JFrame {
         add(mainPanel);
     }
 
-    // 실행문
-    public static void main(String[] args) {
-        new Calculator();
-    }
 }
