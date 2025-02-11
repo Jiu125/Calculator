@@ -1,5 +1,9 @@
 package main;
 
+import main.BtnStyle.JButtonMemory;
+import main.BtnStyle.JButtonS;
+import main.BtnStyle.JButtonWhite;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

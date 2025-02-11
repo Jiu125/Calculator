@@ -1,4 +1,6 @@
-package main;
+package main.BtnStyle;
+
+import main.OperationMethod;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ import java.util.Stack;
  *   <li>2024-10-31: 기능 오류 개선 </li>
  * </ul>
  */
-class JButtonS extends JButton {
+public class JButtonS extends JButton {
     Color c = new Color(0xfbfbfb);
     Font font = new Font("맑은 고딕", Font.PLAIN, 14);
 
@@ -188,90 +190,91 @@ class JButtonS extends JButton {
 
                 // 더하기 연산 처리
                 if (Objects.equals(text, "+")) {
+                    OperationMethod.add(privew, temp, preveiwStack, resultStr, previewStr, num);
 //                     비어있을 때는 => "0 + " 이게 뜸
-                    if (Objects.equals(resultStr, "0")) {
-
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+")) {
-                            preveiwStack.push("+");
-                            privew.setText(String.join(" ", preveiwStack));
-                        }
-                        privew.setText("0 +  ");
-                        temp.clear();
-                    }
-                    else if (!preveiwStack.isEmpty() || num != 0) { // 'A + ' => "3 + " 이케 떠야함
-
-                        preveiwStack.push(previewStr);
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+"))
-                            preveiwStack.push("+");
-                        privew.setText(String.format("%s +  ", previewStr));
-                        temp.clear();
-                    }
+//                    if (Objects.equals(resultStr, "0")) {
+//
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+")) {
+//                            preveiwStack.push("+");
+//                            privew.setText(String.join(" ", preveiwStack));
+//                        }
+//                        privew.setText("0 +  ");
+//                        temp.clear();
+//                    }
+//                    else if (!preveiwStack.isEmpty() || num != 0) { // 'A + ' => "3 + " 이케 떠야함
+//
+//                        preveiwStack.push(previewStr);
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "+"))
+//                            preveiwStack.push("+");
+//                        privew.setText(String.format("%s +  ", previewStr));
+//                        temp.clear();
+//                    }
                 }
 
                 // 빼기 연산 처리
                 if (Objects.equals(text, "-")) {
-
-                    if (Objects.equals(result.getText(), "0")) {
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-")) {
-                            preveiwStack.push("-");
-                            privew.setText(String.join(" ", preveiwStack));
-                        }
-                        privew.setText("0 -  ");
-                        temp.clear();
-                    }
-                    else if (!preveiwStack.isEmpty() || num != 0) {
-                        preveiwStack.push(previewStr);
-
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-"))
-                            preveiwStack.push("-");
-
-                        privew.setText(String.format("%s -  ", previewStr));
-                        temp.clear();
-                    }
+                    OperationMethod.sub(result, privew, temp, preveiwStack, resultStr, num);
+//                    if (Objects.equals(result.getText(), "0")) {
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-")) {
+//                            preveiwStack.push("-");
+//                            privew.setText(String.join(" ", preveiwStack));
+//                        }
+//                        privew.setText("0 -  ");
+//                        temp.clear();
+//                    }
+//                    else if (!preveiwStack.isEmpty() || num != 0) {
+//                        preveiwStack.push(previewStr);
+//
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "-"))
+//                            preveiwStack.push("-");
+//
+//                        privew.setText(String.format("%s -  ", previewStr));
+//                        temp.clear();
+//                    }
                 }
 
                 // 곱하기 연산 처리
                 if (Objects.equals(text, "×")) {
-
-                    if (Objects.equals(result.getText(), "0")) {
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×")) {
-                            preveiwStack.push("×");
-                            privew.setText(String.join(" ", preveiwStack));
-                        }
-                        privew.setText("0 *  ");
-                        temp.clear();
-                    }
-                    else if (!preveiwStack.isEmpty() || num != 0) {
-                        preveiwStack.push(previewStr);
-
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×"))
-                            preveiwStack.push("×");
-
-                        privew.setText(String.format("%s ×  ", previewStr));
-                        temp.clear();
-                    }
+                    OperationMethod.mul(result, privew, temp, preveiwStack, resultStr, num);
+//                    if (Objects.equals(result.getText(), "0")) {
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×")) {
+//                            preveiwStack.push("×");
+//                            privew.setText(String.join(" ", preveiwStack));
+//                        }
+//                        privew.setText("0 *  ");
+//                        temp.clear();
+//                    }
+//                    else if (!preveiwStack.isEmpty() || num != 0) {
+//                        preveiwStack.push(previewStr);
+//
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "×"))
+//                            preveiwStack.push("×");
+//
+//                        privew.setText(String.format("%s ×  ", previewStr));
+//                        temp.clear();
+//                    }
                 }
 
                 // 나누기 연산 처리
                 if (Objects.equals(text, "÷")) {
-
-                    if (Objects.equals(result.getText(), "0")) {
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷")) {
-                            preveiwStack.push("÷");
-                            privew.setText(String.join(" ", preveiwStack));
-                        }
-                        privew.setText("0 ÷  ");
-                        temp.clear();
-                    }
-                    else if (!preveiwStack.isEmpty() || num != 0) {
-                        preveiwStack.push(previewStr);
-
-                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷"))
-                            preveiwStack.push("÷");
-
-                        privew.setText(String.format("%s ÷  ", previewStr));
-                        temp.clear();
-                    }
+                    OperationMethod.div(result, privew, temp, preveiwStack, resultStr, num);
+//                    if (Objects.equals(result.getText(), "0")) {
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷")) {
+//                            preveiwStack.push("÷");
+//                            privew.setText(String.join(" ", preveiwStack));
+//                        }
+//                        privew.setText("0 ÷  ");
+//                        temp.clear();
+//                    }
+//                    else if (!preveiwStack.isEmpty() || num != 0) {
+//                        preveiwStack.push(previewStr);
+//
+//                        if (preveiwStack.isEmpty() || !Objects.equals(preveiwStack.peek(), "÷"))
+//                            preveiwStack.push("÷");
+//
+//                        privew.setText(String.format("%s ÷  ", previewStr));
+//                        temp.clear();
+//                    }
                 }
             }
         });

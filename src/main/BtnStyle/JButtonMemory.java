@@ -1,4 +1,4 @@
-package main;
+package main.BtnStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ import java.util.Stack;
  *   <li>2024-10-30: 오류 개선 </li>
  * </ul>
  */
-class JButtonMemory extends JButton {
+public class JButtonMemory extends JButton {
     Font font = new Font("맑은 고딕", Font.PLAIN, 13);
     Color c = new Color(0xeeeeee);
 
