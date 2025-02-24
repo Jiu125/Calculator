@@ -83,6 +83,9 @@ public class JButtonWhite extends JButton {
 
         this.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+//                System.out.println("X:" + getX() + " Y:" +getY());
+
                 String btnStr = getText();
                 if (btnStr.matches("\\d+")) {  // GPT로 정규식 물어보고 가져옴 숫자일 때 경우
                     if (temp.isEmpty() && btnStr.equals("0")) {

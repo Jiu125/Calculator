@@ -81,6 +81,8 @@ public class JButtonS extends JButton {
             public void actionPerformed(ActionEvent e) {
                 String strNum = "";
 
+//                System.out.println("X:" + getX() + " Y:" +getY());
+
                 for(int i=0; i < temp.size(); i++) { // 하나의 문자열로 가공
                     strNum += temp.get(i);
                 }
